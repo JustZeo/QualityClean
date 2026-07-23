@@ -1,17 +1,54 @@
 [project]
 name = "qualityclean"
 version = "0.1.0"
-description = "Add your description here"
+description = "Fast, automated data cleaning for Polars DataFrames."
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+authors = [
+    { name = "Zeo" }
+]
+
+keywords = [
+    "data-cleaning",
+    "polars",
+    "data-preprocessing",
+    "etl",
+    "machine-learning",
+    "data-science",
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
+]
+
 dependencies = [
     "jinja2>=3.1.6",
     "polars>=1.43.0",
     "rich>=15.0.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/JustZeo/qualityclean"
+Repository = "https://github.com/JustZeo/qualityclean"
+Issues = "https://github.com/JustZeo/qualityclean/issues"
+
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
 ]
+
+[build-system]
+requires = ["uv_build>=0.8.13,<0.9.0"]
+build-backend = "uv_build"
