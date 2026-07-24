@@ -1,0 +1,21 @@
+EmployeeID,Name,Age,Department,PerformanceScore,Salary,JoinDate,Email
+1,John Smith,29,Sales,85,55000,2019-05-12,john.smith@email.com
+2,Jane Doe,,Marketing,90,62000,2018-03-22,jane.doe@email.com
+3,Mike Johnson,35,Sales,78,-58000,2020-01-15,mike.johnson@email.com
+4,emily davis,41,IT,92,75000,2017-11-30,emily.davis@email.com
+5,Chris Lee,150,IT,,68000,2021-07-19,chris.lee@email.com
+6,John Smith,29,Sales,85,55000,2019-05-12,john.smith@email.com
+7,Sara Wilson,27,HR,,49000,2022-02-10,sara.wilson
+8,David Brown,33,Finance,88,NaN,2016-09-05,david.brown@email.com
+9,Laura Miller,45,Marketing,-15,71000,2015-06-25,laura.miller@email.com
+10,,38,IT,79,66000,2019-12-01,tom.anderson@email.com
+11,Anna Taylor,31,Finance,95,82000,2020-08-14,anna.taylor@email.com
+12,Robert Clark,,Sales,60,53000,2021-03-09,robert.clark@email.com
+13,MICHELLE LEE,26,HR,88,   ,2022-05-20,michelle.lee@email.com
+14,Kevin White,52,Finance,71,91000,2014-10-11,kevin.white@email.com
+15,Nina Patel,29,IT,999,64000,2019-09-30,nina.patel@email.com
+16,George King,-5,Sales,82,57000,2020-04-17,george.king@email.com
+17,Olivia Scott,37,Marketing,84,69000,invalid_date,olivia.scott@email.com
+18,Daniel Young,44,HR,76,72000,2016-01-22,daniel.young@email.com
+19,jane doe,28,Marketing,90,62000,2018-03-22,jane.doe@email.com
+20,Sophia Turner,,IT,81,   ,2021-11-05,sophia.turner@email.com
