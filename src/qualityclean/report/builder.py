@@ -110,3 +110,16 @@ class ReportBuilder:
         """Record the number of duplicates removed."""
 
         self.report.duplicates_removed += count
+    def record_datatype_change(
+        self,
+        column: str,
+        before: str,
+        after: str,
+    ) -> None:
+        """Record a datatype conversion."""
+
+        self.report.datatypes_changed += 1
+        self.report.datatype_changes[column] = {
+            "before": before,
+            "after": after,
+    }
