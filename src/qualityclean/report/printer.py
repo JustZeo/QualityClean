@@ -81,8 +81,13 @@ def print_report(report: Report) -> None:
         datatype.add_column("Before", style="yellow")
         datatype.add_column("After", style="green")
 
-        for column, (before, after) in report.datatype_changes.items():
-            datatype.add_row(column, before, after)
+        for column, change in report.datatype_changes.items():
+            datatype.add_row(
+                column,
+                change.get("before","-"),
+                change.get("after","-"),
+
+            )
 
         console.print(datatype)
 

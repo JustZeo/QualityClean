@@ -26,7 +26,7 @@ class Report:
     duplicates_removed: int = 0
 
     datatypes_changed: int = 0
-    datatype_changes: dict[str, str] = field(default_factory=dict)
+    datatype_changes: dict[str,dict[str, str]] = field(default_factory=dict)
 
     memory_before: float = 0.0
     memory_after: float = 0.0
