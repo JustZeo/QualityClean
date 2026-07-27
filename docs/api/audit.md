@@ -19,7 +19,7 @@ The audit report is generated from the `CleanResult` object returned by `clean()
 ```python
 qualityclean.audit(
     result: CleanResult,
-    report_format: str = "print",
+    format: str = "print",
     path: str | pathlib.Path | None = None,
 ) -> None
 ```
@@ -40,7 +40,7 @@ qc.audit(result)
 
 ---
 
-## `report_format`
+## `format`
 
 Specifies how the report should be generated.
 
@@ -56,7 +56,7 @@ Supported values:
 Default:
 
 ```python
-report_format="print"
+format="print"
 ```
 
 ---
@@ -78,7 +78,7 @@ Example:
 ```python
 qc.audit(
     result,
-    report_format="html",
+    format="html",
     path="report.html",
 )
 ```
@@ -122,7 +122,7 @@ Execution Time        : 0.18 s
 ```python
 qc.audit(
     result,
-    report_format="html",
+    format="html",
     path="report.html",
 )
 ```
@@ -134,10 +134,13 @@ qc.audit(
 ```python
 qc.audit(
     result,
-    report_format="markdown",
+    format="markdown",
     path="report.md",
 )
 ```
+
+!!! warning "Known bug: Datatype Changes table"
+    In the current version, the "Datatype Changes" table in the Markdown export renders the literal words `before` and `after` in every row instead of the actual old/new datatypes, due to how that table's rows are unpacked internally. The `print` and `html` formats are not affected. Until this is fixed, prefer `format="print"` or `format="json"` if you need accurate datatype-change details.
 
 ---
 
@@ -146,7 +149,7 @@ qc.audit(
 ```python
 qc.audit(
     result,
-    report_format="json",
+    format="json",
     path="report.json",
 )
 ```
@@ -211,7 +214,7 @@ because `audit()` expects a `CleanResult`.
 ```python
 qc.audit(
     result,
-    report_format="html",
+    format="html",
 )
 ```
 
@@ -230,7 +233,7 @@ because exporting requires a destination path.
 ```python
 qc.audit(
     result,
-    report_format="xml",
+    format="xml",
 )
 ```
 

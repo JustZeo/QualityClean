@@ -70,7 +70,7 @@ df = qc.load("employees.csv")
 
 result = qc.clean(df)
 
-print(result.data.columns)
+print(result.df.columns)
 ```
 
 Output:
@@ -116,6 +116,22 @@ Duplicate Rule
 ```
 
 Running this rule first ensures that every subsequent cleaning step works with normalized column names.
+
+---
+
+# Configuration
+
+Two keywords, passed to `qc.clean()`, control this rule:
+
+| Keyword | Default | Description |
+|---------|---------|--------------|
+| `normalize_names` | `True` | Whether to lowercase, strip, and underscore-join column names at all. Set to `False` to leave column names untouched. |
+| `remove_empty_columns` | `False` | If `True`, drops any column that is entirely null after loading. |
+
+```python
+result = qc.clean(df, normalize_names=False)
+result = qc.clean(df, remove_empty_columns=True)
+```
 
 ---
 

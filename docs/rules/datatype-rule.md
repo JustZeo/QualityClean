@@ -38,16 +38,17 @@ The Datatype Rule automatically converts these columns into more suitable data t
 
 # What Gets Cleaned?
 
-Depending on the data, the Datatype Rule may convert columns to:
+Depending on the data, the Datatype Rule may convert string columns to:
 
-- Integer
-- Float
-- Boolean
+- Integer (`Int64`)
+- Float (`Float64`)
 - Date
 - Datetime
-- String (if conversion is not appropriate)
 
-Only columns that can be safely converted are changed.
+Only columns that can be safely converted are changed — a column is left as `String` if it doesn't confidently match any of the above.
+
+!!! note "Boolean is not inferred"
+    Values like `"True"` / `"False"` are **not** converted to a `Boolean` dtype by this rule — `Boolean` isn't one of the supported cast targets. Such columns remain strings unless you cast them yourself after `clean()`.
 
 ---
 
@@ -74,15 +75,15 @@ active    -> String
 
 | age | salary | active |
 |-----|---------|---------|
-| 24 | 50000 | True |
-| 31 | 62000 | False |
+| 24 | 50000 | "True" |
+| 31 | 62000 | "False" |
 
 Data Types
 
 ```text
 age       -> Int64
 salary    -> Int64
-active    -> Boolean
+active    -> String   # unchanged — Boolean isn't a supported cast target
 ```
 
 ---
@@ -96,7 +97,7 @@ df = qc.load("employees.csv")
 
 result = qc.clean(df)
 
-print(result.data.dtypes)
+print(result.df.dtypes)
 ```
 
 The output will show the inferred Polars data types for each column.
@@ -142,6 +143,19 @@ Running after the Empty Rule ensures placeholder values have already been conver
 Datatype inference is performed once per column.
 
 QualityClean analyzes column values and applies conversions only when they can be performed safely.
+
+---
+
+# Configuration
+
+The conversion threshold is controlled by the `confidence` keyword passed to `qc.clean()` — the fraction of non-null values in a column that must successfully cast to a candidate type before the column is converted.
+
+```python
+result = qc.clean(df, confidence=0.9)  # stricter — fewer columns get converted
+result = qc.clean(df, confidence=0.5)  # looser — more columns get converted
+```
+
+Default: `confidence=0.80` (80% of values must cast successfully).
 
 ---
 

@@ -79,7 +79,7 @@ df = qc.load("employees.csv")
 
 result = qc.clean(df)
 
-print(result.data)
+print(result.df)
 ```
 
 Duplicate rows are automatically removed during the cleaning process.

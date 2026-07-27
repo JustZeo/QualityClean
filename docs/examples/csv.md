@@ -74,7 +74,7 @@ QualityClean automatically performs:
 Access the cleaned DataFrame.
 
 ```python
-clean_df = result.data
+clean_df = result.df
 ```
 
 View the audit report.

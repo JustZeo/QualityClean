@@ -46,11 +46,19 @@ These values may originate from:
 - Placeholder values converted by the Empty Rule
 - Existing null values
 
-Depending on the cleaning configuration, QualityClean may:
+The Missing Rule has two modes, controlled by the `fill` keyword passed to `qc.clean()`:
 
-- Preserve missing values
-- Fill missing values
-- Remove rows containing excessive missing data
+| `fill` | Behavior |
+|--------|----------|
+| `False` (default) | **Drops every row that contains a null value**, in any column. |
+| `True` | Keeps all rows and **fills** nulls instead: median for integer/float columns, mode for string/boolean columns, forward-fill for date/datetime columns. Columns that are entirely null are left unchanged (no median/mode exists to fill with). |
+
+```python
+result = qc.clean(df, fill=True)
+```
+
+!!! warning "The default drops rows, it doesn't just flag them"
+    Unlike the Empty Rule (which only *converts* placeholders to null), the Missing Rule's default behavior removes any row with a null anywhere in it. If you want to keep every row, pass `fill=True`.
 
 ---
 
@@ -67,18 +75,25 @@ Depending on the cleaning configuration, QualityClean may:
 
 ---
 
-## After
-
-Example (preserving missing values)
+## After — default (`fill=False`)
 
 | employee | salary |
 |----------|---------|
 | Alice | 50000 |
-| Bob | null |
 | Charlie | 62000 |
-| David | null |
 
-The exact behavior depends on the configured cleaning strategy.
+Rows for Bob and David are dropped because they contain a null.
+
+## After — with `fill=True`
+
+| employee | salary |
+|----------|---------|
+| Alice | 50000 |
+| Bob | 56000 |
+| Charlie | 62000 |
+| David | 56000 |
+
+Bob and David's salaries are filled with the column median (56000).
 
 ---
 
@@ -91,7 +106,7 @@ df = qc.load("employees.csv")
 
 result = qc.clean(df)
 
-print(result.data)
+print(result.df)
 ```
 
 The Missing Rule automatically processes missing values during the cleaning pipeline.

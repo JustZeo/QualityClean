@@ -18,7 +18,8 @@ Instead of modifying the original DataFrame, `clean()` returns a `CleanResult` o
 
 ```python
 qualityclean.clean(
-    data: pl.DataFrame,
+    df: pl.DataFrame,
+    **kwargs,
 ) -> CleanResult
 ```
 
@@ -26,12 +27,33 @@ qualityclean.clean(
 
 # Parameters
 
-## `data`
+## `df`
 
 The Polars DataFrame to clean.
 
 ```python
 result = qc.clean(df)
+```
+
+## `**kwargs`
+
+Every keyword argument is forwarded straight through to the six built-in rules, so you can tune the pipeline without touching individual rules directly.
+
+| Keyword | Default | Used by | Description |
+|---------|---------|---------|--------------|
+| `normalize_names` | `True` | Column Rule | Lowercase, strip, and underscore-join column names. |
+| `remove_empty_columns` | `False` | Column Rule | Drop columns that are entirely null. |
+| `missing_placeholders` | built-in list (`"N/A"`, `"null"`, `"unknown"`, etc.) | Empty Rule | Custom list of string values to treat as missing and convert to null. |
+| `confidence` | `0.80` | Datatype Rule | Minimum fraction of values that must successfully cast for a column's datatype to be converted. |
+| `fill` | `False` | Missing Rule | If `False` (default), rows containing any null are dropped. If `True`, nulls are filled instead (median for numeric columns, mode for string/boolean columns, forward-fill for dates) — see the [Missing Rule](../rules/missing-rule.md). |
+
+```python
+result = qc.clean(
+    df,
+    fill=True,
+    confidence=0.9,
+    remove_empty_columns=True,
+)
 ```
 
 ---
@@ -44,8 +66,8 @@ The object contains two primary attributes.
 
 | Attribute | Description |
 |-----------|-------------|
-| `data` | Cleaned Polars DataFrame |
-| `report` | Dictionary containing cleaning statistics and metadata |
+| `df` | Cleaned Polars DataFrame |
+| `report` | `Report` dataclass containing cleaning statistics and metadata |
 
 ---
 
@@ -77,7 +99,7 @@ result = qc.clean(df)
 Access the cleaned DataFrame.
 
 ```python
-clean_df = result.data
+clean_df = result.df
 ```
 
 Access the report.
@@ -95,7 +117,7 @@ Example:
 ```python
 result = qc.clean(df)
 
-print(result.data)
+print(result.df)
 print(result.report)
 ```
 
@@ -103,12 +125,19 @@ Typical structure:
 
 ```python
 CleanResult(
-    data=<Polars DataFrame>,
-    report={
+    df=<Polars DataFrame>,
+    report=Report(
+        version="...",
+        original_rows=...,
+        final_rows=...,
+        whitespace_fixed=...,
+        duplicates_removed=...,
         ...
-    }
+    ),
 )
 ```
+
+`report` is a `Report` dataclass instance, not a dictionary — access fields directly (`result.report.duplicates_removed`), or pass it to `qc.audit()` for a formatted view.
 
 ---
 
@@ -179,7 +208,7 @@ result = qc.clean(df)
 
 qc.audit(result)
 
-clean_df = result.data
+clean_df = result.df
 
 qc.export(result, "cleaned.csv")
 ```
@@ -194,21 +223,13 @@ qc.export(result, "cleaned.csv")
 qc.clean("employees.csv")
 ```
 
-Raises:
-
-```
-TypeError
-```
-
-because the input must be a Polars DataFrame.
+`clean()` does not validate its input up front — passing anything other than a `pl.DataFrame` fails inside the first rule that touches it (typically `AttributeError: 'str' object has no attribute 'columns'` from the Column Rule). Call `qc.load()` first to get a proper DataFrame rather than relying on a clean error message here.
 
 ---
 
 ## Empty DataFrame
 
-Cleaning an empty DataFrame returns an empty `CleanResult`.
-
-No exception is raised.
+Cleaning an empty DataFrame (0 rows) runs without raising an exception and returns a `CleanResult` with `original_rows` / `final_rows` set to `0`.
 
 ---
 

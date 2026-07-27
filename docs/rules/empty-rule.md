@@ -88,7 +88,7 @@ df = qc.load("employees.csv")
 
 result = qc.clean(df)
 
-print(result.data)
+print(result.df)
 ```
 
 All recognized placeholder values are converted to null.

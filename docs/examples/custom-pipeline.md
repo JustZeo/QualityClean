@@ -48,16 +48,19 @@ result = qc.clean(df)
 qc.audit(result)
 
 # Access cleaned data
-clean_df = result.data
+clean_df = result.df
 
 # Custom transformation
 clean_df = clean_df.with_columns(
     (pl.col("salary") * 1.10).alias("updated_salary")
 )
 
-# Export final dataset
-qc.export(result, "employees_clean.csv")
+# Export final dataset — export clean_df directly, not `result`
+clean_df.write_csv("employees_clean.csv")
 ```
+
+!!! warning "Exporting `result` after modifying `clean_df` loses your changes"
+    `clean_df.with_columns(...)` returns a **new** DataFrame — it does not mutate `result.df` in place (Polars DataFrames are immutable). If you call `qc.export(result, ...)` after transforming `clean_df`, you'll export the pre-transformation data and silently lose `updated_salary`. Once you've modified `clean_df` yourself, export it directly with Polars (`clean_df.write_csv(...)` / `.write_parquet(...)`) instead of passing `result` back to `qc.export()`.
 
 ---
 
@@ -109,7 +112,7 @@ result = qc.clean(df)
 You can continue using Polars after cleaning.
 
 ```python
-clean_df = result.data
+clean_df = result.df
 
 clean_df = clean_df.with_columns(
     (
@@ -122,7 +125,7 @@ clean_df = clean_df.with_columns(
 
 # Example: Export After Custom Processing
 
-If you've made additional changes to `result.data`, export the final DataFrame directly with Polars.
+If you've made additional changes to `result.df`, export the final DataFrame directly with Polars.
 
 ```python
 clean_df.write_csv("employees_final.csv")

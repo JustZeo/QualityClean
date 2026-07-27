@@ -76,7 +76,7 @@ result = qc.clean(df)
 
 qc.audit(result)
 
-clean_df = result.data
+clean_df = result.df
 ```
 
 In just a few lines of code, QualityClean:
@@ -101,7 +101,7 @@ The object contains two important attributes.
 ## Cleaned Data
 
 ```python
-clean_df = result.data
+clean_df = result.df
 ```
 
 Returns the cleaned Polars DataFrame.
@@ -114,7 +114,7 @@ Returns the cleaned Polars DataFrame.
 report = result.report
 ```
 
-Returns a dictionary containing:
+Returns a `Report` dataclass instance (not a dictionary — access fields directly, e.g. `report.duplicates_removed`) containing:
 
 - Cleaning statistics
 - Rule execution timings
@@ -137,7 +137,7 @@ You can also export the report.
 ```python
 qc.audit(
     result,
-    report_format="html",
+    format="html",
     path="report.html",
 )
 ```

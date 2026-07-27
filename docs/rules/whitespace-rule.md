@@ -92,7 +92,7 @@ df = qc.load("employees.csv")
 
 result = qc.clean(df)
 
-print(result.data)
+print(result.df)
 ```
 
 All unnecessary leading and trailing whitespace is automatically removed.

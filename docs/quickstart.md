@@ -70,7 +70,7 @@ During cleaning, QualityClean automatically performs:
 The cleaned DataFrame is available through:
 
 ```python
-clean_df = result.data
+clean_df = result.df
 ```
 
 You can continue working with it exactly like a normal Polars DataFrame.
@@ -141,7 +141,7 @@ qc.audit(result)
 
 qc.export(result, "cleaned.parquet")
 
-clean_df = result.data
+clean_df = result.df
 ```
 
 This workflow is sufficient for most data cleaning tasks.

@@ -81,7 +81,7 @@ result = qc.clean(df)
 
 qc.audit(result)
 
-print(result.data)
+print(result.df)
 ```
 
 If everything works, your installation is complete.

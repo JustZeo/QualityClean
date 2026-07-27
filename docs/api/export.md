@@ -6,7 +6,7 @@
 
 # Overview
 
-The `export()` function writes the cleaned dataset contained in a `CleanResult` object to a file.
+The `export()` function writes a cleaned dataset to a file. It accepts **either** a `CleanResult` (returned by `clean()`) **or** a plain `pl.DataFrame` directly — if you pass a `CleanResult`, its `.df` is unwrapped automatically.
 
 Instead of manually accessing the cleaned DataFrame and calling Polars export functions, QualityClean provides a simple interface for saving cleaned data.
 
@@ -21,7 +21,7 @@ Currently, QualityClean supports exporting datasets as:
 
 ```python
 qualityclean.export(
-    result: CleanResult,
+    data: pl.DataFrame | CleanResult,
     path: str | pathlib.Path,
 ) -> None
 ```
@@ -30,12 +30,15 @@ qualityclean.export(
 
 # Parameters
 
-## `result`
+## `data`
 
-The `CleanResult` object returned by `clean()`.
+Either the `CleanResult` object returned by `clean()`, or a `pl.DataFrame` directly (e.g. `result.df`, or any other DataFrame you've built yourself).
 
 ```python
 result = qc.clean(df)
+
+qc.export(result, "cleaned.parquet")       # CleanResult — unwrapped automatically
+qc.export(result.df, "cleaned.parquet")    # plain DataFrame — also fine
 ```
 
 ---
@@ -82,6 +85,15 @@ The cleaned dataset is written to the specified file.
 ```python
 qc.export(
     result,
+    "cleaned.csv",
+)
+```
+
+Equivalently, with a plain DataFrame:
+
+```python
+qc.export(
+    result.df,
     "cleaned.csv",
 )
 ```
@@ -142,22 +154,6 @@ No additional parameters are required.
 
 # Errors
 
-## Invalid Result Object
-
-```python
-qc.export(df, "clean.csv")
-```
-
-Raises:
-
-```text
-TypeError
-```
-
-because `export()` expects a `CleanResult`.
-
----
-
 ## Unsupported Extension
 
 ```python
@@ -192,7 +188,7 @@ Raises:
 ValueError
 ```
 
-because a valid destination path must be provided.
+An empty path has no recognizable file extension, which `export()` treats the same as any unsupported extension.
 
 ---
 
