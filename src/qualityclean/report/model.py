@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
-
+from qualityclean import __version__
 
 @dataclass(slots=True)
 class Report:
 
-    version: str = "0.1.0"
+    version: str = field(default_factory=lambda:__version__)
 
     fill_mode: bool = False
 
@@ -38,3 +38,5 @@ class Report:
 
     rule_timings: dict[str, float] = field(default_factory=dict)
     execution_time: float = 0.0
+
+
